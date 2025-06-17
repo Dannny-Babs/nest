@@ -14,7 +14,8 @@ export default function RootLayout() {
 
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="index" options={{ headerShown: false, animation: "fade", animationDuration: 1000, animationTypeForReplace: "pop" , title: "Home"}} />
+      
     </Stack>
   );
 }
