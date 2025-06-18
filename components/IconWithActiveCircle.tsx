@@ -28,8 +28,8 @@ export default function IconWithActiveCircle({ focused, icon }: IconWithActiveCi
     return (
         <Animated.View
             style={{
-                width: focused ? 44 : 40,
-                height: focused ? 44 : 40,
+                width: focused ? 40 : 36,
+                height: focused ? 40 : 36,
                 borderRadius: focused ? 24 : 20,
                 backgroundColor: focused ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
                 alignItems: 'center',

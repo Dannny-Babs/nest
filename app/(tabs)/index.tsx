@@ -15,8 +15,8 @@ export default function Index() {
                         June 17
                     </Text>
                 </View>
-                
-                <ScrollView className="flex" showsVerticalScrollIndicator={false}>
+
+                <ScrollView className="flex" contentContainerStyle={{ paddingBottom: 100 }} style={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
                     <View className="bg-white rounded-2xl border border-slate-100 m-4 flex flex-row items-center justify-between p-3">
                         {Array.from({ length: 7 }).map((_, index) => (
                             <View key={index} className="flex flex-col items-center">
@@ -35,13 +35,13 @@ export default function Index() {
                                 Content Item {index + 1}
                             </Text>
                             <Text className="text-slate-600 font-rethink">
-                                This is some sample content to demonstrate the bottom gradient overlay effect. 
+                                This is some sample content to demonstrate the bottom gradient overlay effect.
                                 As you scroll down, content will fade out before reaching the floating tab bar.
                             </Text>
                         </View>
-                    ))}
-                </ScrollView>  
-                
+                    ))} 
+                </ScrollView>
+
             </SafeAreaView>
         </ScreenWithGradientOverlay>
     );

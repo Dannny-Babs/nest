@@ -1,4 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Add01Icon, Calendar03Icon, CheckmarkSquare04Icon, Home01Icon, TaskEdit02Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Tabs } from 'expo-router';
 import React from 'react';
@@ -9,8 +10,7 @@ import IconWithActiveCircle from '../../components/IconWithActiveCircle';
 export default function TabsLayout() {
     const insets = useSafeAreaInsets();
     const { width } = Dimensions.get('window');
-    const tabBarWidth = Math.min(width - 120, 400); // Responsive width with max constraint
-    const leftMargin = (width - tabBarWidth) / 2;
+    const tabBarWidth = Math.min(width - 120, 500); // Responsive width with max constraint\
 
     return (
         <Tabs
@@ -22,7 +22,8 @@ export default function TabsLayout() {
                 tabBarStyle: {
                     backgroundColor: 'transparent',
                     position: 'absolute',
-                    bottom: 10 + insets.bottom,
+                    bottom: insets.bottom,
+                    paddingTop: 5,
                     left: 80,
                     right: 80,
                     width: tabBarWidth,
@@ -60,26 +61,63 @@ export default function TabsLayout() {
                 },
             }}
         >
-            <Tabs.Screen name="index" options={{
-                headerShown: false, animation: "fade", title: "Home", tabBarIcon: ({ focused, color, size }) => {
-                    return <IconWithActiveCircle focused={focused} icon={<Ionicons name="home" size={24} color={color} />} />
-                }, tabBarLabel: "Home"
-            }} />
-            <Tabs.Screen name="checklist" options={{
-                headerShown: false, animation: "fade", title: "Checklist", tabBarIcon: ({ focused, color, size }) => {
-                    return <IconWithActiveCircle focused={focused} icon={<Ionicons name="list" size={24} color={color} />} />
-                }, tabBarLabel: "Checklist"
-            }} />
-            <Tabs.Screen name="calendar" options={{
-                headerShown: false, animation: "fade", title: "Calendar", tabBarIcon: ({ focused, color, size }) => {
-                    return <IconWithActiveCircle focused={focused} icon={<Ionicons name="calendar" size={24} color={color} />} />
-                }, tabBarLabel: "Calendar"
-            }} />
-            <Tabs.Screen name="add" options={{
-                headerShown: false, animation: "fade", title: "Add", tabBarIcon: ({ focused, color, size }) => {
-                    return <IconWithActiveCircle focused={focused} icon={<Ionicons name="add" size={24} color={color} />} />
-                }, tabBarLabel: "Add"
-            }} />
+            <Tabs.Screen name="index"
+                options={{
+                    headerShown: false, animation: "fade", title: "Home", tabBarIcon: ({ focused, color, size }) => {
+                        return <IconWithActiveCircle focused={focused} icon={
+                            <HugeiconsIcon icon={Home01Icon} size={22} color={color} />
+                        } />
+                    },
+                    tabBarLabel: "Home"
+                }} />
+            <Tabs.Screen name="checklist"
+                options={{
+                    headerShown: false,
+                    animation: "fade",
+                    title: "Checklist",
+                    tabBarIcon: ({ focused, color, size }) => {
+                        return <IconWithActiveCircle focused={focused} icon={
+                            <HugeiconsIcon icon={CheckmarkSquare04Icon} size={22} color={color} />
+                        } />
+                    },
+                    tabBarLabel: "Checklist"
+                }} />
+            <Tabs.Screen name="calendar"
+                options={{
+                    headerShown: false,
+                    animation: "fade",
+                    title: "Calendar",
+                    tabBarIcon: ({ focused, color, size }) => {
+                        return <IconWithActiveCircle focused={focused} icon={
+                            <HugeiconsIcon icon={Calendar03Icon} size={22} color={color} />
+                        } />
+                    },
+                    tabBarLabel: "Calendar"
+                }} />
+            <Tabs.Screen name="notes"
+                options={{
+                    headerShown: false,
+                    animation: "fade",
+                    title: "Note",
+                    tabBarIcon: ({ focused, color, size }) => {
+                        return <IconWithActiveCircle focused={focused} icon={
+                            <HugeiconsIcon icon={TaskEdit02Icon} size={22} color={color} />
+                        } />
+                    },
+                    tabBarLabel: "Note"
+                }} />
+            <Tabs.Screen name="add"
+                options={{
+                    headerShown: false,
+                    animation: "fade",
+                    title: "Add",
+                    tabBarIcon: ({ focused, color, size }) => {
+                        return <IconWithActiveCircle focused={focused} icon={
+                            <HugeiconsIcon icon={Add01Icon} size={22} color={color} />
+                        } />
+                    },
+                    tabBarLabel: "Add"
+                }} />
         </Tabs>
     );
 }
