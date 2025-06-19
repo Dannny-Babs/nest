@@ -1,8 +1,7 @@
 // HomeCard.tsx
-import { CheckmarkSquare04Icon, SquareIcon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from '@hugeicons/react-native'
 import React from 'react'
 import { GestureResponderEvent, Text, TouchableOpacity, View } from 'react-native'
+import { Checkbox } from './ui/checkbox'
 
 // Tailwind classes assume nativewind or similar setup
 
@@ -40,19 +39,17 @@ export default function HomeCard(props: HomeCardProps) {
   } = props
 
   const isDone = type === 'habit' ? doneToday : completed
-  const toggleIcon = isDone ? CheckmarkSquare04Icon : SquareIcon
   // Colors: slate-based for black/white theme
-  const toggleColor = isDone ? '#6B7280' : '#111827' // gray-500 when done, slate-900 when not
-  const titleColorClass = isDone ? 'text-gray-400 line-through' : 'text-gray-900 dark:text-gray-100'
-  const subtitleColorClass = isDone ? 'text-gray-400 line-through' : 'text-gray-500 dark:text-gray-400'
+  const titleColorClass = isDone ? 'text-gray-400 line-through' : 'text-gray-900  '
+  const subtitleColorClass = isDone ? 'text-gray-400 line-through' : 'text-gray-500'
   // Badge background/text uses slate variants
   const badgeBase = 'px-2 py-0.5 rounded-full text-xs font-medium'
   let priorityBadgeClass = ''
   if (type === 'task' && priority) {
     // For black/white only theme, use slate shades: e.g., High=bg-gray-200 text-gray-800, Medium=bg-gray-100 text-gray-800, Low=bg-gray-50 text-gray-800
-    if (priority === 'High') priorityBadgeClass = `${badgeBase} bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200`
-    else if (priority === 'Medium') priorityBadgeClass = `${badgeBase} bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200`
-    else /* Low */ priorityBadgeClass = `${badgeBase} bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200`
+    if (priority === 'High') priorityBadgeClass = `${badgeBase} bg-gray-300 text-gray-800`
+    else if (priority === 'Medium') priorityBadgeClass = `${badgeBase} bg-gray-200 text-gray-800`
+    else /* Low */ priorityBadgeClass = `${badgeBase} bg-gray-100 text-gray-800`
   }
 
   // Optional slot badge (single letter), if you still want it
@@ -60,50 +57,45 @@ export default function HomeCard(props: HomeCardProps) {
 
   return (
     <TouchableOpacity
-      className={`flex-row items-start bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-slate-700 p-3 my-1 ${
-        isDone ? 'bg-gray-100 dark:bg-gray-700' : ''
+      className={`flex-row items-start bg-white rounded-xl border border-gray-100 p-3 my-1 ${
+        isDone ? 'bg-gray-100 ' : ''
       }`}
       onPress={onPress}
       activeOpacity={0.8}
     >
       {/* Left: checkbox/toggle */}
       {onToggle && (
-        <TouchableOpacity
-          onPress={() => onToggle(!isDone)}
-          className="mr-3 pt-1"
-          accessibilityLabel={`Mark ${title} as ${isDone ? 'incomplete' : 'complete'}`}
-        >
-          <HugeiconsIcon
-            icon={toggleIcon}
-            size={24}
-            color={toggleColor}
+        <View className="mr-3 pt-1">
+          <Checkbox 
+            checked={isDone} 
+            onCheckedChange={onToggle}
           />
-        </TouchableOpacity>
+        </View>
       )}
 
       {/* Center: title and minimal subtitle */}
       <View className="flex-1">
         {/* Title */}
-        <Text className={`text-base font-semibold ${titleColorClass}`} numberOfLines={1}>
+        <Text style={{ fontSize: 17 }} className={`font-rethink-semibold ${titleColorClass}`} numberOfLines={1}>
           {title}
         </Text>
         {/* Subtitle */}
         {type === 'habit' ? (
           frequency ? (
-            <Text className={`text-sm mt-1 ${subtitleColorClass}`}>
+            <Text style={{ fontSize: 14 }} className={`font-rethink-medium mt-1 ${subtitleColorClass}`}>
               {frequency}
             </Text>
           ) : null
         ) : (
           <View className="flex-row items-center mt-1 space-x-2">
             {dateTime && (
-              <Text className={`text-sm ${subtitleColorClass}`}>
+              <Text style={{ fontSize: 14 }} className={`font-rethink-medium ${subtitleColorClass}`}>
                 {dateTime}
               </Text>
             )}
             {priority && (
               <View className={priorityBadgeClass}>
-                <Text className="text-xs">{priority}</Text>
+                <Text style={{ fontSize: 12 }} className={`font-rethink-medium ${subtitleColorClass}`}>{priority}</Text>
               </View>
             )}
           </View>
@@ -113,7 +105,7 @@ export default function HomeCard(props: HomeCardProps) {
       {/* Right: optional slot badge */}
       {slot && (
         <View className="ml-3 items-center">
-          <Text className={slotBadgeClass}>{slot.charAt(0)}</Text>
+          <Text style={{ fontSize: 12 }} className={`font-rethink-medium ${subtitleColorClass}`}>{slot.charAt(0)}</Text>
         </View>
       )}
     </TouchableOpacity>

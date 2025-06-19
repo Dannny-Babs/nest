@@ -2,7 +2,7 @@ import { ArrowDown01Icon, ArrowUp01Icon, FireIcon, SunCloud02Icon, Task02Icon } 
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import DailyTimeline from "../../components/DailyTimeline";
 import HomeCard from "../../components/HomeCard";
 import ScreenWithGradientOverlay from "../../components/ScreenWithGradientOverlay";
@@ -60,6 +60,7 @@ export default function Index() {
             dateTime: '08:30',
             priority: 'Medium' as const,
             completed: false,
+            slot: 'Morning'
         },
         {
             id: 't2',
@@ -67,6 +68,7 @@ export default function Index() {
             dateTime: '10:00',
             priority: 'High' as const,
             completed: true,
+            slot: 'Morning'
         },
         {
             id: 't3',
@@ -74,6 +76,7 @@ export default function Index() {
             dateTime: '15:00',
             priority: 'High' as const,
             completed: false,
+            slot: 'Afternoon'
         },
         {
             id: 't4',
@@ -81,6 +84,7 @@ export default function Index() {
             // no dateTime: treated as unscheduled
             priority: 'Low' as const,
             completed: false,
+            slot: 'Evening'
         },
         {
             id: 't5',
@@ -88,6 +92,7 @@ export default function Index() {
             dateTime: '20:00',
             priority: 'Medium' as const,
             completed: false,
+            slot: 'Evening'
         },
     ];
 
@@ -173,48 +178,75 @@ export default function Index() {
                 {/* Daily Timeline */}
                 <DailyTimeline />
 
-                {/* Habits Section */}
-                <View className="mx-6 flex flex-row items-center gap-2 mt-2">
-                    <HugeiconsIcon icon={SunCloud02Icon} size={20} color="#010101" />
-                    <Text className="text-lg font-rethink-semibold text-slate-700 tracking-tight">
-                        Morning
-                    </Text>
-                </View>
-                {mockHabits && mockHabits.length > 0 && (
-                    <View className="mx-4 mt-2 space-y-2 gap-2 flex flex-col">
-                        {mockHabits.map(habit => (
+                <ScrollView >
+
+                    {/* Habits Section */}
+                    <View className="mx-6 flex flex-row items-center gap-2 mt-2">
+                        <HugeiconsIcon icon={SunCloud02Icon} size={20} color="#010101" />
+                        <Text className="text-lg font-rethink-semibold text-slate-700 tracking-tight">
+                            Morning
+                        </Text>
+                    </View>
+                    {mockHabits && mockHabits.length > 0 && (
+                        <View className="mx-4 mt-2 flex flex-col">
+                            {mockHabits
+                                .filter(habit => habit.slot === 'Morning')
+                                .map(habit => (
+                                    <HomeCard
+                                        key={habit.id}
+                                        type="habit"
+                                        title={habit.title}
+                                        frequency={habit.frequency}
+                                        doneToday={habit.doneToday}
+                                        onToggle={newVal => handleToggle(habit.id, newVal, 'habit')}
+                                        onPress={() => handlePress(habit.id, 'habit')}
+                                    />
+                                ))}
+                        </View>
+                    )}
+                    {mockTasks.length > 0 && (
+                        <View className="mx-4 flex flex-col">
+                            {mockTasks
+                                .filter(task => task.slot === 'Morning')
+                                .map(task => (
+                                    <HomeCard
+                                        key={task.id}
+                                        type="task"
+                                        title={task.title}
+                                        dateTime={task.dateTime}
+                                        priority={task.priority}
+                                        completed={task.completed}
+                                        onToggle={newVal => handleToggle(task.id, newVal, 'task')}
+                                        onPress={() => handlePress(task.id, 'task')}
+                                    />
+                                ))}
+                        </View>
+                    )}
+
+                    {/* Evening Habits */}
+                    <View className="mx-6 flex flex-row items-center gap-2 mt-2">
+                        <HugeiconsIcon icon={SunCloud02Icon} size={20} color="#010101" />
+                        <Text className="text-lg font-rethink-semibold text-slate-700 tracking-tight">
+                            Evening
+                        </Text>
+                    </View>
+
+                    <View className="mt-6">
+                        <Text className="text-lg font-semibold mb-2">Today&apos;s Tasks</Text>
+                        {mockTasks.map(task => (
                             <HomeCard
-                                key={habit.id}
-                                type="habit"
-                                title={habit.title}
-                                frequency={habit.frequency}
-                                doneToday={habit.doneToday}
-                                onToggle={newVal => handleToggle(habit.id, newVal, 'habit')}
-                                onPress={() => handlePress(habit.id, 'habit')}
+                                key={task.id}
+                                type="task"
+                                title={task.title}
+                                dateTime={task.dateTime}
+                                priority={task.priority}
+                                completed={task.completed}
+                                onToggle={newVal => handleToggle(task.id, newVal, 'task')}
+                                onPress={() => handlePress(task.id, 'task')}
                             />
                         ))}
                     </View>
-                )}
-
-                <View className="mt-6">
-                    <Text className="text-lg font-semibold mb-2">Today&apos;s Tasks</Text>
-                    {mockTasks.map(task => (
-                        <HomeCard
-                            key={task.id}
-                            type="task"
-                            title={task.title}
-                            dateTime={task.dateTime}
-                            priority={task.priority}
-                            completed={task.completed}
-                            onToggle={newVal => handleToggle(task.id, newVal, 'task')}
-                            onPress={() => handlePress(task.id, 'task')}
-                        />
-                    ))}
-                </View>
-
-
-
-
+                </ScrollView>
             </SafeAreaView>
         </ScreenWithGradientOverlay >
     );
