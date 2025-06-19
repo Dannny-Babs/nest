@@ -1,4 +1,4 @@
-import { ArrowDown01Icon, ArrowUp01Icon, FireIcon, SunCloud02Icon, Task02Icon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, ArrowUp01Icon, FireIcon, Moon02Icon, MoonCloudIcon, Sun01Icon, SunCloud02Icon, Task02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
@@ -6,6 +6,7 @@ import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-na
 import DailyTimeline from "../../components/DailyTimeline";
 import HomeCard from "../../components/HomeCard";
 import ScreenWithGradientOverlay from "../../components/ScreenWithGradientOverlay";
+import { computeWeeklyStatus } from "../../lib/date";
 
 export default function Index() {
     const [overdueExpanded, setOverdueExpanded] = useState(false);
@@ -13,42 +14,47 @@ export default function Index() {
     // Mock overdue tasks - replace with real data
     const overdueTasks: any[] = [];
 
-    // Mock habits
+    // Mock habits with history dates
     const mockHabits = [
         {
             id: 'h1',
             title: 'Meditate',
             frequency: 'Daily',
             doneToday: false,
-            slot: 'Morning'
+            slot: 'Morning',
+            historyDates: ['2025-06-16', '2025-06-17', '2025-06-18', '2025-06-19'] // Mon-Thu done
         },
         {
             id: 'h2',
             title: 'Drink Water',
             frequency: 'Daily',
             doneToday: true,
-            slot: 'Morning'
+            slot: 'Morning',
+            historyDates: ['2025-06-16', '2025-06-17', '2025-06-18', '2025-06-19'] // Mon-Thu done
         },
         {
             id: 'h3',
             title: 'Read a Book',
             frequency: 'Weekly',
             doneToday: false,
-            slot: 'Evening'
+            slot: 'Evening',
+            historyDates: ['2025-06-16', '2025-06-18'] // Mon, Wed done
         },
         {
             id: 'h4',
             title: 'Stretch',
             frequency: 'Daily',
             doneToday: false,
-            slot: 'Morning'
+            slot: 'Morning',
+            historyDates: ['2025-06-16', '2025-06-17'] // Mon, Tue done
         },
         {
             id: 'h5',
             title: 'Journal',
             frequency: 'Daily',
             doneToday: true,
-            slot: 'Evening'
+            slot: 'Evening',
+            historyDates: ['2025-06-16', '2025-06-17', '2025-06-18', '2025-06-19'] // Mon-Thu done
         },
     ];
 
@@ -105,22 +111,21 @@ export default function Index() {
         // navigate to detail
     }
 
-
     return (
         <ScreenWithGradientOverlay>
             <SafeAreaView className="flex bg-slate-50 font-rethink">
-                <StatusBar style="dark" />
+            <StatusBar style="dark" />
                 <View className="flex flex-row justify-between px-6 py-2 items-center">
                     <Text className="text-3xl font-rethink-bold text-slate-950 tracking-tight">
                         Today
-                    </Text>
+                </Text>
                     <View className="flex flex-row items-center gap-2">
                         <View className="flex flex-row items-center gap-1 bg-slate-200 rounded-full p-2">
                             <HugeiconsIcon icon={Task02Icon} size={20} color="#010101" />
                             <Text className="text-lg font-rethink-medium text-slate-950">
-                                12 Tasks
-                            </Text>
-                        </View>
+                                {mockTasks.length} Tasks
+                </Text>
+            </View>
                         <View className="flex flex-row items-center gap-1 bg-slate-200 rounded-full p-2">
                             <HugeiconsIcon icon={FireIcon} size={20} color="#010101" />
                             <Text className="text-lg font-rethink-medium text-slate-950">
@@ -178,7 +183,7 @@ export default function Index() {
                 {/* Daily Timeline */}
                 <DailyTimeline />
 
-                <ScrollView >
+                <ScrollView contentContainerStyle={{ paddingBottom: 100, marginBottom: 200 }} showsVerticalScrollIndicator={false} >
 
                     {/* Habits Section */}
                     <View className="mx-6 flex flex-row items-center gap-2 mt-2">
@@ -191,23 +196,31 @@ export default function Index() {
                         <View className="mx-4 mt-2 flex flex-col">
                             {mockHabits
                                 .filter(habit => habit.slot === 'Morning')
-                                .map(habit => (
-                                    <HomeCard
-                                        key={habit.id}
-                                        type="habit"
-                                        title={habit.title}
-                                        frequency={habit.frequency}
-                                        doneToday={habit.doneToday}
-                                        onToggle={newVal => handleToggle(habit.id, newVal, 'habit')}
-                                        onPress={() => handlePress(habit.id, 'habit')}
-                                    />
-                                ))}
+                                .map(habit => {
+                                    const weeklyStatus = computeWeeklyStatus(habit.historyDates);
+                                    return (
+                                        <HomeCard
+                                            key={habit.id}
+                                            type="habit"
+                                            title={habit.title}
+                                            frequency={habit.frequency}
+                                            doneToday={habit.doneToday}
+                                            weeklyStatus={weeklyStatus}
+                                            onToggle={newVal => handleToggle(habit.id, newVal, 'habit')}
+                                            onPress={() => handlePress(habit.id, 'habit')}
+                                        />
+                                    );
+                                })}
                         </View>
                     )}
                     {mockTasks.length > 0 && (
                         <View className="mx-4 flex flex-col">
                             {mockTasks
-                                .filter(task => task.slot === 'Morning')
+                                .filter(task => {
+                                    if (!task.dateTime) return false;
+                                    const hour = parseInt(task.dateTime.split(':')[0]);
+                                    return hour < 12; // Morning: before 12:00
+                                })
                                 .map(task => (
                                     <HomeCard
                                         key={task.id}
@@ -223,31 +236,83 @@ export default function Index() {
                         </View>
                     )}
 
+                    {/* Afternoon Habits */}
+                    <View className="mx-6 my-3 flex flex-row items-center gap-2">
+                        <HugeiconsIcon icon={Sun01Icon} size={20} color="#010101" />
+                        <Text className="text-lg font-rethink-semibold text-slate-700 tracking-tight">
+                            Afternoon
+                        </Text>
+                    </View>
+
+                    <View className=" mx-4 flex flex-col">
+                        {mockTasks
+                            .filter(task => {
+                                if (!task.dateTime) return false;
+                                const hour = parseInt(task.dateTime.split(':')[0]);
+                                return hour >= 12 && hour < 17; // Afternoon: between 12:00 and 17:00
+                            })
+                            .map(task => (
+                                <HomeCard
+                                    key={task.id}
+                                    type="task"
+                                    title={task.title}
+                                    dateTime={task.dateTime}
+                                    priority={task.priority}
+                                    completed={task.completed}
+                                    onToggle={newVal => handleToggle(task.id, newVal, 'task')}
+                                    onPress={() => handlePress(task.id, 'task')}
+                                />
+                            ))}
+                    </View>
+
                     {/* Evening Habits */}
-                    <View className="mx-6 flex flex-row items-center gap-2 mt-2">
-                        <HugeiconsIcon icon={SunCloud02Icon} size={20} color="#010101" />
+                    <View className="mx-6 my-3 flex flex-row items-center gap-2">
+                        <HugeiconsIcon icon={MoonCloudIcon} size={20} color="#010101" />
                         <Text className="text-lg font-rethink-semibold text-slate-700 tracking-tight">
                             Evening
                         </Text>
                     </View>
 
-                    <View className="mt-6">
-                        <Text className="text-lg font-semibold mb-2">Today&apos;s Tasks</Text>
-                        {mockTasks.map(task => (
-                            <HomeCard
-                                key={task.id}
-                                type="task"
-                                title={task.title}
-                                dateTime={task.dateTime}
-                                priority={task.priority}
-                                completed={task.completed}
-                                onToggle={newVal => handleToggle(task.id, newVal, 'task')}
-                                onPress={() => handlePress(task.id, 'task')}
-                            />
-                        ))}
-                    </View>
+                    <View className=" mx-4 flex flex-col">
+                        {mockTasks
+                            .filter(task => {
+                                if (!task.dateTime) return false;
+                                const hour = parseInt(task.dateTime.split(':')[0]);
+                                return hour >= 17; // Evening: after 17:00
+                            })
+                            .map(task => (
+                                <HomeCard
+                                    key={task.id}
+                                    type="task"
+                                    title={task.title}
+                                    dateTime={task.dateTime}
+                                    priority={task.priority}
+                                    completed={task.completed}
+                                    onToggle={newVal => handleToggle(task.id, newVal, 'task')}
+                                    onPress={() => handlePress(task.id, 'task')}
+                                />
+                            ))}
+                        {mockHabits
+                            .filter(habit => habit.slot === 'Evening')
+                            .map(habit => {
+                                const weeklyStatus = computeWeeklyStatus(habit.historyDates);
+                                return (
+                                    <HomeCard
+                                        key={habit.id}
+                                        type="habit"
+                                        title={habit.title}
+                                        frequency={habit.frequency}
+                                        doneToday={habit.doneToday}
+                                        weeklyStatus={weeklyStatus}
+                                        onToggle={newVal => handleToggle(habit.id, newVal, 'habit')}
+                                        onPress={() => handlePress(habit.id, 'habit')}
+                                    />
+                                );
+                            })}
+            </View>
+                    <View className="h-40" />
                 </ScrollView>
-            </SafeAreaView>
+        </SafeAreaView>
         </ScreenWithGradientOverlay >
     );
 } 
