@@ -14,7 +14,7 @@ export default function ScreenWithGradientOverlay({
 }: ScreenWithGradientOverlayProps) {
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} className='flex-1 bg-slate-50'>
             {children}
                 <LinearGradient
                     colors={['rgba(255, 255, 255, 0.45)', '#ffffff']}

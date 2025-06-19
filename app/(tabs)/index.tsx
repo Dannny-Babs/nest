@@ -1,8 +1,10 @@
-import { ArrowDown01Icon, ArrowUp01Icon, FireIcon, Task02Icon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, ArrowUp01Icon, FireIcon, SunCloud02Icon, Task02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import DailyTimeline from "../../components/DailyTimeline";
+import HomeCard from "../../components/HomeCard";
 import ScreenWithGradientOverlay from "../../components/ScreenWithGradientOverlay";
 
 export default function Index() {
@@ -10,7 +12,95 @@ export default function Index() {
 
     // Mock overdue tasks - replace with real data
     const overdueTasks: any[] = [];
-    
+
+    // Mock habits
+    const mockHabits = [
+        {
+            id: 'h1',
+            title: 'Meditate',
+            frequency: 'Daily',
+            doneToday: false,
+            slot: 'Morning'
+        },
+        {
+            id: 'h2',
+            title: 'Drink Water',
+            frequency: 'Daily',
+            doneToday: true,
+            slot: 'Morning'
+        },
+        {
+            id: 'h3',
+            title: 'Read a Book',
+            frequency: 'Weekly',
+            doneToday: false,
+            slot: 'Evening'
+        },
+        {
+            id: 'h4',
+            title: 'Stretch',
+            frequency: 'Daily',
+            doneToday: false,
+            slot: 'Morning'
+        },
+        {
+            id: 'h5',
+            title: 'Journal',
+            frequency: 'Daily',
+            doneToday: true,
+            slot: 'Evening'
+        },
+    ];
+
+    // Mock tasks
+    const mockTasks = [
+        {
+            id: 't1',
+            title: 'Buy Groceries',
+            dateTime: '08:30',
+            priority: 'Medium' as const,
+            completed: false,
+        },
+        {
+            id: 't2',
+            title: 'Team Standup',
+            dateTime: '10:00',
+            priority: 'High' as const,
+            completed: true,
+        },
+        {
+            id: 't3',
+            title: 'Submit Report',
+            dateTime: '15:00',
+            priority: 'High' as const,
+            completed: false,
+        },
+        {
+            id: 't4',
+            title: 'Call Mom',
+            // no dateTime: treated as unscheduled
+            priority: 'Low' as const,
+            completed: false,
+        },
+        {
+            id: 't5',
+            title: 'Plan Weekend Trip',
+            dateTime: '20:00',
+            priority: 'Medium' as const,
+            completed: false,
+        },
+    ];
+
+    const handleToggle = (id: string, newVal: boolean, type: string) => {
+        console.log(`Toggled ${type} ${id} =>`, newVal)
+        // update your state here
+    }
+    const handlePress = (id: string, type: string) => {
+        console.log(`Pressed ${type} ${id}`)
+        // navigate to detail
+    }
+
+
     return (
         <ScreenWithGradientOverlay>
             <SafeAreaView className="flex bg-slate-50 font-rethink">
@@ -47,13 +137,12 @@ export default function Index() {
                                 <Text className="text-lg font-rethink-semibold text-red-800">
                                     Overdue from yesterday
                                 </Text>
-
                             </View>
                             <View className="flex flex-row items-center gap-2">
                                 <Text className="text-lg font-rethink-medium text-red-700">
                                     {overdueTasks.length.toString().padStart(2, '0')}
                                 </Text>
-                                 <HugeiconsIcon
+                                <HugeiconsIcon
                                     icon={overdueExpanded ? ArrowDown01Icon : ArrowUp01Icon}
                                     size={20}
                                     color="#dc2626"
@@ -81,55 +170,52 @@ export default function Index() {
                     </View>
                 )}
 
-                <ScrollView className="flex" contentContainerStyle={{ paddingBottom: 100 }} style={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-                    <View className="bg-white rounded-2xl border border-slate-100 m-4 flex flex-row items-center justify-between p-3">
-                        {(() => {
-                            const today = new Date();
-                            const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
-                            const currentDate = today.getDate();
+                {/* Daily Timeline */}
+                <DailyTimeline />
 
-                            // Calculate Monday of current week
-                            const monday = new Date(today);
-                            const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1; // Adjust for Sunday
-                            monday.setDate(currentDate - daysFromMonday);
-
-                            const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-                            return Array.from({ length: 7 }).map((_, index) => {
-                                const dayDate = new Date(monday);
-                                dayDate.setDate(monday.getDate() + index);
-
-                                const isToday = dayDate.toDateString() === today.toDateString();
-                                const dayName = dayNames[index];
-                                const dayNumber = dayDate.getDate();
-
-                                return (
-                                    <View key={index} className="flex flex-col items-center">
-                                        <Text className="text-base font-rethink-semibold text-slate-500">{dayName}</Text>
-                                        <View className={`w-10 h-10 rounded-xl mt-2 flex items-center justify-center ${isToday ? 'bg-slate-900 ' : 'bg-slate-100 '}`}>
-                                            <Text className={`text-lg  tracking-tight ${isToday ? 'font-rethink-bold text-white' : 'font-rethink-semibold text-slate-600'}`}>{dayNumber}</Text>
-                                        </View>
-                                    </View>
-                                );
-                            });
-                        })()}
+                {/* Habits Section */}
+                <View className="mx-6 flex flex-row items-center gap-2 mt-2">
+                    <HugeiconsIcon icon={SunCloud02Icon} size={20} color="#010101" />
+                    <Text className="text-lg font-rethink-semibold text-slate-700 tracking-tight">
+                        Morning
+                    </Text>
+                </View>
+                {mockHabits && mockHabits.length > 0 && (
+                    <View className="mx-4 mt-2 space-y-2 gap-2 flex flex-col">
+                        {mockHabits.map(habit => (
+                            <HomeCard
+                                key={habit.id}
+                                type="habit"
+                                title={habit.title}
+                                frequency={habit.frequency}
+                                doneToday={habit.doneToday}
+                                onToggle={newVal => handleToggle(habit.id, newVal, 'habit')}
+                                onPress={() => handlePress(habit.id, 'habit')}
+                            />
+                        ))}
                     </View>
+                )}
 
-                    {/* Add more content to demonstrate gradient fade */}
-                    {Array.from({ length: 10 }).map((_, index) => (
-                        <View key={`content-${index}`} className="bg-white rounded-xl border border-slate-100 mx-4 mb-4 p-4">
-                            <Text className="text-lg font-rethink-semibold text-slate-950 mb-2">
-                                Content Item {index + 1}
-                            </Text>
-                            <Text className="text-slate-600 font-rethink">
-                                This is some sample content to demonstrate the bottom gradient overlay effect.
-                                As you scroll down, content will fade out before reaching the floating tab bar.
-                            </Text>
-                        </View>
+                <View className="mt-6">
+                    <Text className="text-lg font-semibold mb-2">Today&apos;s Tasks</Text>
+                    {mockTasks.map(task => (
+                        <HomeCard
+                            key={task.id}
+                            type="task"
+                            title={task.title}
+                            dateTime={task.dateTime}
+                            priority={task.priority}
+                            completed={task.completed}
+                            onToggle={newVal => handleToggle(task.id, newVal, 'task')}
+                            onPress={() => handlePress(task.id, 'task')}
+                        />
                     ))}
-                </ScrollView>
+                </View>
+
+
+
 
             </SafeAreaView>
-        </ScreenWithGradientOverlay>
+        </ScreenWithGradientOverlay >
     );
 } 
