@@ -9,12 +9,8 @@ export default function Index() {
     const [overdueExpanded, setOverdueExpanded] = useState(false);
 
     // Mock overdue tasks - replace with real data
-    const overdueTasks = [
-        { id: 1, title: "Complete project proposal", category: "Work" },
-        { id: 2, title: "Call dentist", category: "Health" },
-        { id: 3, title: "Buy groceries", category: "Personal" },
-    ];
-
+    const overdueTasks: any[] = [];
+    
     return (
         <ScreenWithGradientOverlay>
             <SafeAreaView className="flex bg-slate-50 font-rethink">
@@ -63,7 +59,6 @@ export default function Index() {
                                     color="#dc2626"
                                 />
                             </View>
-
                         </TouchableOpacity>
 
                         {overdueExpanded && (
