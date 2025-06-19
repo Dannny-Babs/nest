@@ -1,4 +1,4 @@
-import { Add01Icon, Calendar03Icon, CheckmarkSquare04Icon, Home01Icon, TaskEdit02Icon } from '@hugeicons/core-free-icons';
+import { Add01Icon, Calendar03Icon, CheckmarkSquare04Icon, Home01Icon, Home02Icon, NoteEditIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Tabs } from 'expo-router';
@@ -65,7 +65,7 @@ export default function TabsLayout() {
                 options={{
                     headerShown: false, animation: "fade", title: "Home", tabBarIcon: ({ focused, color, size }) => {
                         return <IconWithActiveCircle focused={focused} icon={
-                            <HugeiconsIcon icon={Home01Icon} size={22} color={color} />
+                            <HugeiconsIcon icon={Home01Icon} altIcon={Home02Icon} size={22} color={color} showAlt={focused} />
                         } />
                     },
                     tabBarLabel: "Home"
@@ -101,7 +101,7 @@ export default function TabsLayout() {
                     title: "Note",
                     tabBarIcon: ({ focused, color, size }) => {
                         return <IconWithActiveCircle focused={focused} icon={
-                            <HugeiconsIcon icon={TaskEdit02Icon} size={22} color={color} />
+                            <HugeiconsIcon icon={NoteEditIcon} size={22} color={color} />
                         } />
                     },
                     tabBarLabel: "Note"
