@@ -1,4 +1,4 @@
-import { ArrowDown01Icon, ArrowUp01Icon, FireIcon, Moon02Icon, MoonCloudIcon, Sun01Icon, SunCloud02Icon, Task02Icon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, ArrowUp01Icon, MoonCloudIcon, Sun01Icon, SunCloud02Icon, Task02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
@@ -114,22 +114,16 @@ export default function Index() {
     return (
         <ScreenWithGradientOverlay>
             <SafeAreaView className="flex bg-slate-50 font-rethink">
-            <StatusBar style="dark" />
+                <StatusBar style="dark" />
                 <View className="flex flex-row justify-between px-6 py-2 items-center">
                     <Text className="text-3xl font-rethink-bold text-slate-950 tracking-tight">
                         Today
-                </Text>
+                    </Text>
                     <View className="flex flex-row items-center gap-2">
                         <View className="flex flex-row items-center gap-1 bg-slate-200 rounded-full p-2">
                             <HugeiconsIcon icon={Task02Icon} size={20} color="#010101" />
                             <Text className="text-lg font-rethink-medium text-slate-950">
                                 {mockTasks.length} Tasks
-                </Text>
-            </View>
-                        <View className="flex flex-row items-center gap-1 bg-slate-200 rounded-full p-2">
-                            <HugeiconsIcon icon={FireIcon} size={20} color="#010101" />
-                            <Text className="text-lg font-rethink-medium text-slate-950">
-                                5 days
                             </Text>
                         </View>
                     </View>
@@ -309,10 +303,10 @@ export default function Index() {
                                     />
                                 );
                             })}
-            </View>
+                    </View>
                     <View className="h-40" />
                 </ScrollView>
-        </SafeAreaView>
+            </SafeAreaView>
         </ScreenWithGradientOverlay >
     );
 } 
