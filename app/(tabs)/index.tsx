@@ -177,7 +177,10 @@ export default function Index() {
                 {/* Daily Timeline */}
                 <DailyTimeline />
 
-                <ScrollView contentContainerStyle={{ paddingBottom: 100, marginBottom: 200 }} showsVerticalScrollIndicator={false} >
+                <ScrollView 
+                    contentContainerStyle={{ paddingBottom: 100, marginBottom: 200 }} 
+                    showsVerticalScrollIndicator={false}
+                >
 
                     {/* Habits Section */}
                     <View className="mx-6 flex flex-row items-center gap-2 mt-2">
@@ -190,7 +193,7 @@ export default function Index() {
                         <View className="mx-4 mt-2 flex flex-col">
                             {mockHabits
                                 .filter(habit => habit.slot === 'Morning')
-                                .map(habit => {
+                                .map((habit, index) => {
                                     const weeklyStatus = computeWeeklyStatus(habit.historyDates);
                                     return (
                                         <HomeCard
@@ -215,7 +218,7 @@ export default function Index() {
                                     const hour = parseInt(task.dateTime.split(':')[0]);
                                     return hour < 12; // Morning: before 12:00
                                 })
-                                .map(task => (
+                                .map((task, index) => (
                                     <HomeCard
                                         key={task.id}
                                         type="task"
@@ -245,7 +248,7 @@ export default function Index() {
                                 const hour = parseInt(task.dateTime.split(':')[0]);
                                 return hour >= 12 && hour < 17; // Afternoon: between 12:00 and 17:00
                             })
-                            .map(task => (
+                            .map((task, index) => (
                                 <HomeCard
                                     key={task.id}
                                     type="task"
@@ -274,7 +277,7 @@ export default function Index() {
                                 const hour = parseInt(task.dateTime.split(':')[0]);
                                 return hour >= 17; // Evening: after 17:00
                             })
-                            .map(task => (
+                            .map((task, index) => (
                                 <HomeCard
                                     key={task.id}
                                     type="task"
@@ -288,7 +291,7 @@ export default function Index() {
                             ))}
                         {mockHabits
                             .filter(habit => habit.slot === 'Evening')
-                            .map(habit => {
+                            .map((habit, index) => {
                                 const weeklyStatus = computeWeeklyStatus(habit.historyDates);
                                 return (
                                     <HomeCard
